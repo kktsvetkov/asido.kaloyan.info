@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Asido: PHP Image Processing Solution</title>
+<link href="/bootstrap.3.3.7/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Asido Overview</h1>
+
+			<p>A lot of <strong><em>PHP </em></strong>developers (both
+			on the <strong><em>PHP4 </em></strong>and <strong><em>PHP5</em>
+			</strong>side) need image transformation operations for
+			various tasks, the most mundane of which are the proportional
+			resizing and watermarking. Most of them strive to make
+			their projects and scripts run on as many platforms and
+			evironments as possible. You can find various scripts
+			about image transforming operations utilizing all the
+			availble environments, but they lack a centralized
+			approach towards using them. The best thing you might
+			get is <a href="http://pear.php.net/package/Image_Transform"
+			target="_blank" title="PEAR::Image_Transform">PEAR::Image_Transform</a>,
+			but it is still in its alpha stage and the latest
+			release was more than year and a half ago. Since more of
+			the recent projects I was involved in required such
+			image transforming functionality that will work on
+			various platforms and enviroments, I decided to create
+			the <strong><a><em>Asido</em></a></strong> library.
+			<strong><a href="https://github.com/kktsvetkov/asido"
+			title="Asido is a PHP (PHP4/PHP5) image processing solution"
+			target="_blank">Asido</a></strong> is open-source and
+			its <a href="http://www.gnu.org/licenses/lgpl.html"
+			target="_blank" title="GNU Lesser General Public License, Version 2.1, February 1999">LGPL</a>
+			license allows you to place the class in your proprietary
+			<strong><em>PHP </em></strong>projects (<a
+			href="http://www.opensource.org/licenses/lgpl-license.php"
+			target="_blank"
+			title="GNU Lesser General Public License, Version 2.1, February 1999">http://www.opensource.org/licenses/lgpl-license.php</a>).</p>
+
+		</div>
+
+		<p><strong><a href="https://github.com/kktsvetkov/asido"
+			title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank">Asido</a></strong>
+		offers the following functionality:</p>
+
+		<ul>
+		<li><em><a href="/features.html#resize">resize</a></em> images</li>
+		<li><em><a href="/features.html#watermark">watermark</a></em> images</li>
+		<li><em><a href="/features.html#rotate">rotate</a></em> imates</li>
+		<li><em><a href="/features.html#copy">copy</a> </em>images</li>
+		<li><em><a href="/features.html#crop">crop</a> </em>images</li>
+		<li><em><a href="/features.html#grayscale">grayscale</a> </em>images</li>
+		<li><em><a href="/features.html#convert">convert</a> </em>images</li>
+		</ul>
+
+		<p>Installation is pretty easy: virtually there&#8217;s none.
+		All you need is to include the <code>class.asido.php</code> file
+		and that&#8217;s it &#8211; you are good to go. You may include
+		it by directly specifying the path to the file, or by using
+		<code>include_path</code> &#8211; it will not matter.</p>
+
+<p>Here&#8217;s a quick example:</p>
+<pre lang="php" style="background:lightyellow">
+<&#63;php
+
+/**
+* Set the path to the Asido library
+*/
+include('./../../asido/dev/class.asido.php');
+
+/**
+* Use the GD driver
+*/
+asido::driver('gd');
+
+/**
+* Create an Asido_Image object
+*/
+$i1 = asido::image(
+'the-source-image.jpg',
+'filename-with-which-you-want-to-save-the-result.png'
+);
+
+/**
+* Watermark it
+*/
+asido::watermark($i1, 'put-the-watermark-image-here.png');
+
+/**
+* Resize it proportionally to make it fit inside a 400x400 frame
+*/
+asido::resize($i1, 400, 400, ASIDO_RESIZE_PROPORTIONAL);
+
+/**
+* Save it and overwrite the file if it exists
+*/
+$i1->save(ASIDO_OVERWRITE_ENABLED);
+
+?></pre>
+
+	</div>
+
+	<script src="/bootstrap.3.3.7/jquery.min.js"></script>
+	<script src="/bootstrap.3.3.7/bootstrap.min.js"></script>
+	<script src="/nav.js"></script>
+</body>
+</html>

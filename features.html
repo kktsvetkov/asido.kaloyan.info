@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Asido: PHP Image Processing Solution</title>
+<link href="/bootstrap.3.3.7/bootstrap.min.css" rel="stylesheet" />
+<style>
+div.preview {margin: 5px 0em;}
+
+div.preview a {
+    background: url(/2.gif) center center;
+    float: left;
+    width: 150px;
+    height: 150px;
+    border: solid 1px black;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    text-align: center;
+    line-height: 150px;
+    overflow: hidden;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+div.preview a img {
+    border-width: 0px;
+    vertical-align: middle;
+    position: relative;
+    left: -4px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Asido Features</h1>
+
+			<p><strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank"
+			href="https://github.com/kktsvetkov/asido">Asido</a></strong>
+			offers some of the most basic and most frequently used image
+			transformation features. Here&#8217;s a bit more detailed
+			overview of <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank"
+			href="https://github.com/kktsvetkov/asido">Asido</a></strong>
+			features, with comments, examples, etc. The features are arranged
+			more or less from the most often used ones and popular (like watermark, resize and convert)
+			down to the ones that least used (like rotate, flip, crop, grayscale, etc).</p>
+		</div>
+
+		<h1 id="watermark">Watermark</h1>
+		<hr/>
+
+		<p><a title="Digital Watermark" target="_blank" href="http://en.wikipedia.org/wiki/Digital_watermark">Watermarking</a>
+		is a very common operation required by a variety of web projects.
+		Here&#8217;s an example how
+		<strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>does it:</p>
+
+<pre lang="php" style="background:lightyellow">
+<&#63;php
+
+/**
+* Set the path to the Asido library
+*/
+include('./../../asido/dev/class.asido.php');
+
+/**
+* Use the GD driver
+*/
+asido::driver('gd');
+
+/**
+* Create an Asido_Image object
+*/
+$i1 = asido::image(
+      'the-source-image.jpg',
+      'filename-with-which-you-want-to-save-the-result.png'
+);
+
+/**
+* Watermark it
+*/
+asido::watermark($i1, 'put-the-watermark-image-here.png');
+
+/**
+* Save it and overwrite the file if it exists
+*/
+$i1->save(ASIDO_OVERWRITE_ENABLED);
+?>
+</pre>
+
+		<p>As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank"
+		href="https://github.com/kktsvetkov/asido"> Asido</a></strong> operations
+		you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it.
+		The watermark&nbsp; image itself must from one of the supported by the currently loaded driver file formats.
+		The position of the watermark (gravity) can be set by using one of the ten available constants:
+		</p>
+
+		<ul>
+			<li><code>ASIDO_WATERMARK_TOP_LEFT</code>,</li>
+			<li><code>ASIDO_WATERMARK_TOP_CENTER</code>,</li>
+			<li><code>ASIDO_WATERMARK_TOP_RIGHT</code>,</li>
+			<li><code>ASIDO_WATERMARK_MIDDLE_LEFT</code>,</li>
+			<li><code>ASIDO_WATERMARK_MIDDLE_CENTER</code>,</li>
+			<li><code>ASIDO_WATERMARK_MIDDLE_RIGHT</code>,</li>
+			<li><code>ASIDO_WATERMARK_BOTTOM_LEFT</code>,</li>
+			<li><code>ASIDO_WATERMARK_BOTTOM_CENTER</code>,</li>
+			<li><code>ASIDO_WATERMARK_BOTTOM_RIGHT</code> and</li>
+			<li><code>ASIDO_WATERMARK_TILE</code></li>
+		</ul>
+
+		<p>The last one, <code>ASIDO_WATERMARK_TILE</code>, is used to perform a tile watermark on the image.
+		If the position(gravity) is omitted as argument, the default gravity is <code>ASIDO_WATERMARK_BOTTOM_RIGHT</code>.
+
+		All the non-tile positions have aliases for those of you who prefer to use the North, East, South and West directions:
+		<code>ASIDO_WATERMARK_NORTH_WEST</code>,
+		<code>ASIDO_WATERMARK_NORTH</code>,
+		<code>ASIDO_WATERMARK_NORTH_EAST</code>,
+		<code>ASIDO_WATERMARK_WEST</code>,
+		<code>ASIDO_WATERMARK_CENTER</code>,
+		<code>ASIDO_WATERMARK_MIDDLE</code> (same as <code>ASIDO_WATERMARK_CENTER</code>),
+		<code>ASIDO_WATERMARK_EAST</code>,
+		<code>ASIDO_WATERMARK_SOUTH_WEST</code>,
+		<code>ASIDO_WATERMARK_SOUTH</code>,
+		<code>ASIDO_WATERMARK_SOUTH_EAST</code>.</p>
+
+		<div class="preview">
+		<a target="_blank" href="http://www.asido.info/examples/watermark/example.jpg" rel="lightbox[roadtrip1]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/watermark/example_thumb.jpg" alt="Source Image" /></a> <a target="_blank" href="http://www.asido.info/examples/watermark/watermark_02.png" rel="lightbox[roadtrip1]" title="Watermark">&nbsp;<img src="http://www.asido.info/examples/watermark/watermark_02.png" alt="Watermark" /></a> <a target="_blank" href="http://www.asido.info/features/watermark.jpg" rel="lightbox[roadtrip1]" title="Result w/ using all nine gravities">&nbsp;<img src="http://www.asido.info/features/watermark_thumb.jpg" alt="Result w/ using all nine gravities" /></a> <a target="_blank" href="http://www.asido.info/examples/watermark/expected_result_02.jpg" rel="lightbox[roadtrip1]" title="Result w/ tile watermark">&nbsp;<img src="http://www.asido.info/examples/watermark/expected_result_02_thumb.jpg" alt="Result w/ tile watermark" /></a>
+		</div>
+		<div style="clear:left;"></div>
+
+		<p>There are situations in which it turns out that the watermark image is considerable larger compared to the image that is going to be watermarked. In these scenarios&nbsp;<strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong> applies <em>watermark scaling.</em> This means that the watermark is resized so it dimensions become some portion of the image that is going to be watermarked. This feature can be turned on and off by using the <code>ASIDO_WATERMARK_SCALABLE_ENABLED</code> and <code>ASIDO_WATERMARK_SCALABLE_DISABLED</code> constants. By default, the featured is enabled, and the scaling factor is taken from the <code>ASIDO_WATERMARK_SCALABLE_FACTOR</code> constant. If you want you can re-define this constant, or just provide a decimal value (0 &lt; scaling_factor &lt; 1) instead. By default, the scaling factor is 0.25 (1/4).</p>
+
+<pre lang="php" style="background:lightyellow">
+/**
+* Put the watermark with the scaling feature enabled
+*/
+Asido::watermark($i1, 'watermark_03.png', ASIDO_WATERMARK_BOTTOM_RIGHT, ASIDO_WATERMARK_SCALABLE_ENABLED);
+
+/**
+* Put the watermark with the scaling feature disabled
+*/
+Asido::watermark($i1, 'watermark_03.png', ASIDO_WATERMARK_CENTER, ASIDO_WATERMARK_SCALABLE_DISABLED);
+</pre>
+<pre lang="php" style="background:lightyellow">
+/**
+* Put the watermark with the scaling factor 0.66
+*/
+Asido::watermark($i2, 'watermark_04.png', ASIDO_WATERMARK_TOP_LEFT, ASIDO_WATERMARK_SCALABLE_ENABLED, 0.66);
+
+/**
+* Put the watermark with the scaling factor 0.75
+*/
+Asido::watermark($i2, 'watermark_04.png', ASIDO_WATERMARK_BOTTOM_RIGHT, ASIDO_WATERMARK_SCALABLE_ENABLED, 0.75);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/watermark/example.jpg" rel="lightbox[roadtrip2]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/watermark/example_thumb.jpg" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/watermark/watermark_03.png" rel="lightbox[roadtrip2]" title="Watermark">&nbsp;<img src="http://www.asido.info/examples/watermark/watermark_03_thumb.png" alt="Watermark" /></a> </p>
+<p><a target="_blank" href="http://www.asido.info/examples/watermark/expected_result_03.jpg" rel="lightbox[roadtrip2]" title="Result w/ scaling disabled">&nbsp;<img src="http://www.asido.info/examples/watermark/expected_result_03_thumb.jpg" alt="Result w/ scaling disabled" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/watermark/expected_result_04.jpg" rel="lightbox[roadtrip2]" title="Result w/ using two different scaling factors">&nbsp;<img src="http://www.asido.info/examples/watermark/expected_result_04_thumb.jpg" alt="Result w/ using two different scaling factors" /></a>
+</div>
+<div style="clear:left;"></div>
+
+
+		<h1 id="resize" style="margin-top: 2em;">Resize</h1>
+		<hr/>
+
+		<p><strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido">Asido</a> </strong>offers various resizing features. First, let&#8217;s go over the proportional resize. If all argumens except <strong><code>$width</code></strong> and <code><strong>$height</strong></code> are omitted, <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido">Asido</a> </strong>will perform a propprtional resize, which will try to fit the image inside the provided &quot;resize frame&quot; (by the <strong><code>$width</code></strong> and <code><strong>$height</strong></code>  arguments) while keeping its proportions. As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it.</p>
+<pre lang="php" style="background:lightyellow">
+<&#63;php
+/**
+* Set the path to the Asido library
+*/
+include('./../../asido/dev/class.asido.php');
+
+/**
+* Use the GD driver
+*/
+asido::driver('gd');
+
+/**
+* Create an Asido_Image object
+*/
+$i1 = asido::image(
+      'the-source-image.jpg',
+      'filename-with-which-you-want-to-save-the-result.png'
+);
+
+/**
+* Resize it proportionally to make it fit inside a 400x400 frame
+*/
+asido::resize($i1, 400, 400, ASIDO_RESIZE_PROPORTIONAL);
+
+/**
+* Save it and overwrite the file if it exists
+*/
+$i1->save(ASIDO_OVERWRITE_ENABLED);
+?>
+</pre>
+<p>
+However, you can resize by only one of the dimensions: either width or height. This will result in a proportional resize, where the &quot;other&quot; dimension is resized proportionaly in order to keep the image proportions.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image proportionally only by setting only the height, and the width will be corrected accordingly
+*/
+Asido::resize($i1, 0, 400);
+</pre>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image proportionally only by setting only the width, and the height will be corrected accordingly
+*/
+Asido::resize($i1, 400, 0);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/resize/example.png" rel="lightbox[roadtrip3]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image (640x480)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/features/resize_02.png" rel="lightbox[roadtrip3]" title="Result w/ resizing by width only (400x300)">&nbsp;<img src="http://www.asido.info/features/resize_02_thumb.png" alt="Result w/ resizing by width only (400x300)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_01.png" rel="lightbox[roadtrip3]" title="Result w/ resizing by height only (533x400)">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_01_thumb.png" alt="Result w/ resizing by height only (533x400)" /></a>
+</div>
+<div style="clear:left;"></div>
+<p>
+The last argument for the resize operation is the type or the mode of the resizing operations. The default value is <code>ASIDO_RESIZE_PROPORTIONAL</code>, which means that a proportional resize is going to be performed. The other two are <code>ASIDO_RESIZE_STRETCH</code> and <code>ASIDO_RESIZE_FIT</code> &#8211; those will be covered below in the sections about the <em><strong>Stretch</strong></em> and <em><strong>Fit</strong></em> features.</p>
+<p><script type="text/javascript"><!--
+google_ad_client = "pub-3813963842297642";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "text";
+//2007-06-06: Asido, Asido: Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã¨
+google_ad_channel = "0656541872+4477045438";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "E1771E";
+google_color_text = "000000";
+google_color_url = "008000";
+//-->
+</script><br />
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></p>
+
+
+		<h1 id="width" style="margin-top: 2em">Width</h1>
+		</hr/>
+
+<p>This is an easy way to do a proportional resize only by the <em>width</em> dimension.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image proportionally only by setting only the width, and the height will be corrected accordingly
+*/
+Asido::width($i1, 600);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/resize/example.png" rel="lightbox[roadtrip4]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image (640x480)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_02.png" rel="lightbox[roadtrip4]" title="Result w/ resizing only by one dimension [width] (600x450)">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_02_thumb.png" alt="Result w/ resizing only by one dimension [width] (600x450)" /></a>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="height" style="margin-top: 2em">Height</h1>
+		</hr/>
+
+<p>This is an easy way to do a proportional resize only by the <em>height</em> dimension.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image proportionally only by setting only the height, and the width will be corrected accordingly
+*/
+Asido::height($i1, 400);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/resize/example.png" rel="lightbox[roadtrip5]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image (640x480)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_01.png" rel="lightbox[roadtrip5]" title="Result w/ resizing only by one dimension [height] (533x400)">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_01_thumb.png" alt="Result w/ resizing only by one dimension [height] (533x400)" /></a>
+</div>
+<div style="clear:left;"></div>
+
+
+		<h1 id="stretch" style="margin-top: 2em">Stretch</h1>
+		</hr/>
+
+<p>This feature performs a disproportional resize, or <em><strong>stretch</strong></em>: the image will be stretched to fit perfectly inside the &quot;resize frame&quot; (provided by the <strong><code>$width</code></strong> and <code><strong>$height</strong></code>  arguments). In general this feature is not going to be used very often, but it is good to have it inside our arsenal just in case a situation requiring such feature emerges.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image by stretching it and using default resizing method
+*/
+Asido::resize($i1, 500, 500, ASIDO_RESIZE_STRETCH);
+</pre>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image by stretching it and using `alias` method
+*/
+Asido::stretch($i1, 500, 500);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/resize/example.png" rel="lightbox[roadtrip6]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image (640x480)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_03.png" rel="lightbox[roadtrip6]" title="Result w/ stretch resizing (500x500)">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_03_thumb.png" alt="Result w/ stretch resizing (500x500)" /></a>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="fit" style="margin-top: 2em">Fit</h1>
+		</hr/>
+
+<p>This type of resize is a proportional resize, but its behaviour is affected by the size(dimensions) of the image. If the image is smaller then the &quot;resize frame&quot; (provided by the <strong><code>$width</code></strong> and <code><strong>$height</strong></code>  arguments), it will <strong>NOT</strong> be resized: it will resize only if any of its dimensions are bigger than those of the &quot;resize frame&quot;. This feature is very handy &#8211; it will save you the pixelation effect if you are trying to resize smaller images to fit into larger &quot;frames&quot;.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image by fitting it inside the 800x800 frame: in
+* fact it will not be resized because it is smaller (640x480)
+*/
+Asido::Fit($i1, 800, 800);
+</pre>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image by fitting it inside the 400x400 frame: the image
+* will do be resized by making it fit inside the 400x400 "mold"
+*/
+Asido::Fit($i2, 400, 400);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/resize/example.png" rel="lightbox[roadtrip7]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image (640x480)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_04_1.png" rel="lightbox[roadtrip7]" title="Result w/ fit 800x800 resizing (the same as original)">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_04_1_thumb.png" alt="Result w/ fit 800x800 resizing (the same as original)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_04_2.png" rel="lightbox[roadtrip7]" title="Result w/ fit 400x400 resizing (indeed resized to 400x300)">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_04_2_thumb.png" alt="Result w/ fit 400x400 resizing (indeed resized to 400x300)" /></a>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="frame" style="margin-top: 2em">Frame</h1>
+		</hr/>
+
+<p>This is another handy resize feature. It is a kind of compromise between the stretch resize and the proportional resize. This&nbsp; feature will resize the image proportionally using the <em><strong>Fit </strong></em>feature (not the regular proportional resize) and will place it in the center of a canvas, which has&nbsp; <strong><code>$width</code></strong> and <code><strong>$height</strong></code>  as its dimensions, and <code><strong>$color</strong></code> as its background. This is very usefull, because it offers the ablity to fit virtually any image inside any resize frame &#8211; and the proportions will not matter: you can fit a landcape inside a square, or a square inside a portrait, etc. The <code><strong>$color</strong></code> argument is used in the same manner as it is used when rotating by custsom angles &#8211; to fill the left blank areas.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Resize the image by putting it inside a square frame (300x300) with `rgb(177,77,37)` as background.
+*/
+Asido::Frame($i1, 300, 300, Asido::Color(39, 107, 20));
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/resize/example.png" rel="lightbox[roadtrip8]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image (640x480)" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/resize/expected_result_05.png" rel="lightbox[roadtrip8]" title="Result w/ frame resizing">&nbsp;<img src="http://www.asido.info/examples/resize/expected_result_05_thumb.png" alt="Result w/ frame resizing" /></a>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="converts" style="margin-top: 2em">Convert</h1>
+		</hr/>
+
+<p>This feature is used to transform an image file from one to another file format. Different drivers support different set of file formats, but all of them support the most common &quot;web&quot; formats: JPEG, PNG and GIF. As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it. In order to change the image file type, you need to specify a new mime-type for that image. There are three predefined constants for all the &quot;web&quot; formats: <code>ASIDO_MIME_JPEG</code>, <code>ASIDO_MIME_GIF</code> and <code>ASIDO_MIME_PNG</code></p>
+<pre lang="php" style="background:lightyellow">
+<&#63;php
+/**
+* Include the main Asido class
+*/
+include('./../../class.asido.php');
+
+/**
+* Set the correct driver: this depends on your local environment
+*/
+asido::driver('gd');
+
+/**
+* Create an Asido_Image object and provide the name of the source
+* image, and the name with which you want to save the file
+*/
+$i1 = asido::image('example.png', 'result_02.jpg');
+
+/**
+* Save the result as GIF nevertheless we set the result name to be a JPEG one
+*/
+Asido::convert($i1, 'image/gif');
+
+/**
+* Save the result
+*/
+$i1->save(ASIDO_OVERWRITE_ENABLED);
+?>
+</pre>
+
+		<h1 id="rotate" style="margin-top: 2em">Rotate</h1>
+		</hr/>
+
+<p>While watermarking, resizing and converting are the most popular image transformation tasks, the ones from this list starting this one &#8211; rotating &#8211; are more &quot;exotic&quot; and not that oftenly used. The rotating as its name suggests is used to rotate an image. As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it. The most common scenarios are to rotate images by 90<sup>o</sup>, 180<sup>o</sup> or 270<sup>o</sup>.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Rotates the image by 90, 180 and 270 degrees
+*/
+Asido::Rotate($i1, 90);
+Asido::Rotate($i1, 180);
+Asido::Rotate($i1, 270);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/rotate/example.png" rel="lightbox[roadtrip9]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/rotate/expected_result_01.png" rel="lightbox[roadtrip9]" title="Result w/ 90 degrees rotation">&nbsp;<img src="http://www.asido.info/examples/rotate/expected_result_01_thumb.png" alt="Result w/ 90 degrees rotation" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/features/rotate_180.png" rel="lightbox[roadtrip9]" title="Result w/ 180 degrees rotation">&nbsp;<img src="http://www.asido.info/features/rotate_180_thumb.png" alt="Result w/ 180 degrees rotation" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/features/rotate_270.png" rel="lightbox[roadtrip9]" title="Result w/ 270 degrees rotation">&nbsp;<img src="http://www.asido.info/features/rotate_270_thumb.png" alt="Result w/ 270 degrees rotation" /></a></p>
+</div>
+<div style="clear:left;"></div>
+<p>
+Asido also supports rotation by any custom angle. For all those &quot;custom&quot; rorations there are blank areas enclosed by the rotated sides of the image and the rectangular sides of the resulting image. For &quot;those blank areas&quot; the rotate feature uses a color provided as additional argument, which is applied to the blank areas. If this argument is omittted, then white color will be used</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Rotates the image by 30 degrees, filling the blank areas left by the rotate with a nice green color
+*/
+Asido::Rotate($i1, 30, Asido::Color(39, 107, 20));
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/rotate/example.png" rel="lightbox[roadtrip10]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/rotate/expected_result_02.png" rel="lightbox[roadtrip10]" title="Result w/ 30 degrees rotation">&nbsp;<img src="http://www.asido.info/examples/rotate/expected_result_02_thumb.png" alt="Result w/ 30 degrees rotation" /></a></p>
+</div>
+<div style="clear:left;"></div>
+
+
+		<h1 id="flip" style="margin-top: 2em">Flip</h1>
+		</hr/>
+
+<p>Flip stands for creating a vertical mirror of an image. As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it. </p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Flip it 😉
+*/
+Asido::Flip($i1);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/rotate/example.png" rel="lightbox[roadtrip11]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/rotate/expected_result_03.png" rel="lightbox[roadtrip11]" title="Result w/ flipping the image">&nbsp;<img src="http://www.asido.info/examples/rotate/expected_result_03_thumb.png" alt="Result w/ flipping the image" /></a></p>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="flop" style="margin-top: 2em">Flop</h1>
+		</hr/>
+
+<p>Flops stands for creating a horizontal mirror of an image. As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it. </p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Flop it 😉
+*/
+Asido::Flop($i1);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/rotate/example.png" rel="lightbox[roadtrip12]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/resize/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/rotate/expected_result_04.png" rel="lightbox[roadtrip12]" title="Result w/ flopping the image">&nbsp;<img src="http://www.asido.info/examples/rotate/expected_result_04_thumb.png" alt="Result w/ flopping the image" /></a></p>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="crop" style="margin-top: 2em">Crop</h1>
+		</hr/>
+
+<p>Crop is not a very commonly used feature, but it best to have it available and not use it, instead of to need ti and to not have it implemented&#8230; right ?  As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it. In order to crop the image you need to specify the upper left corner of the &quot;<em>crop frame</em>&quot; with the <strong><code>$x</code></strong> and <code><strong>$y</strong></code> arguments, aswell as the <strong><code>$width</code></strong> and the <strong><code>$height</code></strong> of the &quot;<em>crop frame</em>&quot;:</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Crop a portion of the image from the upper left corner
+*/
+Asido::Crop($i1, 0, 0, 300, 300);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/crop/example.png" rel="lightbox[roadtrip13]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/crop/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/crop/expected_result_01.jpg" rel="lightbox[roadtrip13]" title="Result w/ cropping">&nbsp;<img src="http://www.asido.info/examples/crop/expected_result_01_thumb.jpg" alt="Result w/ cropping" /></a>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="copy" style="margin-top: 2em">Copy</h1>
+		</hr/>
+
+<p>This is not so much of a common image transformation task, but in certain situations it is indeed useful &#8211; like using&nbsp;<strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong> to create a very basic <a href="http://en.wikipedia.org/wiki/Captcha" target="_blank" title="Completely Automated Public Turing test to tell Computers and Humans Apart">CAPTCHA</a> image.  As for all <strong><a title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank" href="https://github.com/kktsvetkov/asido"> Asido</a> </strong>operations you have to first create an <strong><code>Asido_Image</code></strong> object and then manipulate it. The image that you are copying must be one of the supported (by currently active driver) image file formats. </p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Copy the image with over the resulting image
+*/
+Asido::copy($i1, 'copy_01.png', 15, 15);
+</pre
+<pre lang="php" style="background:lightyellow">
+/**
+* Copy an image using negative coordinates
+*/
+Asido::copy($i1, 'copy_02.jpg', -35, -35);
+</pre>
+<p>If the image has alpha transaprency, it is kept during the copy operation. Under the hood, this very same functionality is utilized in the watermark feature, so keeping the &quot;<em>alpha</em>&quot; is very important.</p>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/crop/example.png" rel="lightbox[roadtrip14]" title="Source Image">&nbsp;<img src="http://www.asido.info/examples/crop/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/crop/copy_01.png" rel="lightbox[roadtrip14]" title="Copy Image #01">&nbsp;<img src="http://www.asido.info/examples/crop/copy_01_thumb.png" alt="Copy Image #01" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/crop/copy_02.jpg" rel="lightbox[roadtrip14]" title="Copy Image #02">&nbsp;<img src="http://www.asido.info/examples/crop/copy_02_thumb.jpg" alt="Copy Image #02" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/crop/expected_result_02.jpg" rel="lightbox[roadtrip14]" title="Result w/ the two images copied">&nbsp;<img src="http://www.asido.info/examples/crop/expected_result_02_thumb.jpg" alt="Result w/ the two images copied" /></a>
+</div>
+<div style="clear:left;"></div>
+
+		<h1 id="grayscale" style="margin-top: 2em">Grayscale</h1>
+		</hr/>
+
+<p>Making an image grayscale is not of a common image transformation task, but it is a good asset in the set of features Asido offers.</p>
+<pre lang="php" style="background:lightyellow">
+/**
+* Do the grayscale baby 😉
+*/
+Asido::GreyScale($i1);
+</pre>
+<div class="preview">
+<a target="_blank" href="http://www.asido.info/examples/convert/example.png" rel="lightbox[roadtripA]" title="Source Image (640x480)">&nbsp;<img src="http://www.asido.info/examples/convert/example_thumb.png" alt="Source Image" /></a></p>
+<p><a target="_blank" href="http://www.asido.info/examples/convert/expected_result_03.png" rel="lightbox[roadtripA]" title="Result w/ greyscaling applied">&nbsp;<img src="http://www.asido.info/examples/convert/expected_result_03_thumb.png" alt="Result w/ greyscaling applied" /></a></p>
+</div>
+
+
+	</div>
+
+	<script src="/bootstrap.3.3.7/jquery.min.js"></script>
+	<script src="/bootstrap.3.3.7/bootstrap.min.js"></script>
+	<script src="/nav.js"></script>
+</body>
+</html>
