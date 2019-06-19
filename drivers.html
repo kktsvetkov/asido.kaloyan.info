@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Drivers | Asido: PHP Image Processing Solution</title>
+<link href="/bootstrap.3.3.7/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Asido Drivers</h1>
+
+			<p>The main advantage of <strong><a href="https://github.com/kktsvetkov/asido"
+			title="Asido is a PHP (PHP4/PHP5) image processing solution" target="_blank">Asido</a></strong>
+			is to have a common and solid API for image transformations
+			no matter what environment you got.
+			This is achived by using the so-called &#8222;drivers&#8220;,
+			which utilize the selected environment to always deliver the same result.
+			There are drivers for either <strong>PHP</strong> extensions like
+			<code><a target="_blank" href="http://www.php.net/gd" title="PHP: Image Functions">php_gd</a></code>,
+			<code><a target="_blank" href="http://freshmeat.net/projects/php_imagick/" title="This is an extension for PHP4 that makes the ImageMagick image manipulation library available from within PHP scripts">php_imagick</a></code>, <code><a title="MagickWand For PHP" target="_blank" href="http://magickwand.org/">php_magickwand</a></code>, or <code><a title="PHP Imlib2 Extension" target="_blank" href="http://freshmeat.net/projects/php_imlib/">php_imlib</a></code> (not yet supported), as well as shell tools like <em><a href="http://imagemagick.org/" target="_blank" title="ImageMagick is a software suite to create, edit, and compose bitmap images">Image Magick</a></em>, <em><a title="NetPBM is a toolkit for manipulation of graphic images, including conversion of images between a variety of different formats." target="_blank" href="http://netpbm.sourceforge.net/">NetPBM</a></em> and <em><a target="_blank" href="http://www.enlightenment.org/Libraries/Imlib2/">ImLib2</a></em> (so far only <em>Image Magick</em> is supported as shell driver).</p>
+		</div>
+
+		 <h1>Ordinary Drivers</h1>
+		 <hr/>
+
+		 <p><strong><a href="https://github.com/kktsvetkov/asido"
+		title="Asido is a PHP (PHP4/PHP5) image processing solution"
+		target="_blank">Asido</a></strong> supports the following environments:</p>
+
+		<h4>GD2</h4>
+  		This is the most common environment.
+		In order to use it, you got to have the <code>php_gd.dll</code> (<code>gd.so</code>)
+		extension loaded (<a target="_blank" href="http://php.net/manual/en/ref.image.php#image.requirements">more info</a>).
+
+<pre lang="php">
+/**
+* Enable the GD driver
+*/
+asido::driver('gd');
+</pre>
+			The <strong><em>GD</em></strong> driver has a hack version,
+			which enables flipping (vertical mirror), flopping (horizontal mirror), and grayscaling.
+
+		<h4 style="margin-top:1em">MagickWand</h4>
+			<em><big>MagickWand</big></em>  is
+			a native <em>PHP-extension</em> to the <strong>ImageMagick</strong>
+			<strong>MagickWand</strong> API. This is the (most recent, read <em>official</em>)
+			<strong>ImageMagick</strong> API for <strong>PHP</strong>
+			and it is <em>the</em> recomended <strong>ImageMagick</strong>
+			API for using with <strong>PHP</strong>. In order to use
+			it, you got to have the <code>php_magickwand.dll</code>
+			(<code>magickwand.so</code>) extension loaded
+			(<a target="blank" href="http://imagemagick.org/script/api.php#php">more info</a>).
+<pre lang="php">
+/**
+* Enable the Magick Wand driver
+*/
+asido::driver('magick_wand');
+</pre>
+			The old <strong>ImageMagick</strong> API is still
+			available when using the <code>php_imagick</code> extension.
+
+			<h4 style="margin-top:1em">Imagick extension</h4>
+
+<em><big>Imagick extension</big></em>  is a native <em>PHP-extension</em> to the <strong>ImageMagick</strong> API. This is the <em>&#8222;old&#8220;</em> <strong>ImageMagick</strong> API for <strong>PHP</strong>, but it is still present in all the latest <strong>PHP</strong> builds. In order to use it, you got to have the <code>php_imagick.dll</code> (<code>imagick.so</code>) extension loaded (<a target="blank" href="http://php.net/manual/en/ref.imagick.php#imagick.requirements">more info</a>).</p>
+<pre lang="php">
+/**
+* Enable the Imagick Extension driver
+*/
+asido::driver('imagick_ext');
+</pre>
+<p>The <strong><em>imagick_ext</em></strong> driver has a hack version, which enables fully-featured rotating and somewhat version of grayscaling.
+
+			<h4 style="margin-top:1em">Imagick shell</h4>
+
+			This driver utilizes the <a href="http://en.wikipedia.org/wiki/Command_line_interface" title="Command Line Interface">CLI</a> commands of ImageMagick (<a target="blank" href="http://imagemagick.org/script/command-line-tools.php" title="Image Magick: Command Line Tools">more info</a>).</p>
+<pre lang="php">
+/**
+* Enable the Imagick Shell driver
+*/
+asido::driver('imagick_shell');
+</pre>
+<p>The <strong><em>imagick_shell</em></strong> driver has a hack version, which enables fully-featured rotating.
+
+
+		<h1 style="margin-top:2em">Hack Drivers</h1>
+		<hr/>
+<p>In several occasions, some particular environment can not deliver some of the required functionality. For these scenarios there is a family of drivers, called the &#8222;hack&#8220; drivers. Those drivers have work-arounds for the missing functionalities using whatever they can find useful from the features of the environment. All those work-arounds are functional, but they are not as fast as the &#8222;core&#8220; implementations of the ordinary drivers. Here are the &#8222;hack&#8220; drivers and the applied work-arounds:</p>
+<ul>
+<li>
+  <strong><em><big>gd_hack:</big></em></strong> this driver introduces the ability to flip (vertical mirror), flop (horizontal mirror), or grayscale images.</p>
+<pre lang="php">
+/**
+* Enable the GD hack driver
+*/
+asido::driver('gd_hack');
+</pre>
+<p>Of all the drivers, probably this is the one that is used the most. This is because it combines a very popular environment (<code>php_gd</code>), and some extra feature that miss in the original driver.
+ </li>
+<li>
+  <strong><em><big>imagick_ext_hack:</big></em></strong> this driver introduces the ability to do a fully-featured rotation and an odd way of grayscaling.</p>
+<pre lang="php">
+/**
+* Enable the Imagick Extension hack driver
+*/
+asido::driver('imagick_ext_hack');
+</pre>
+<p>The extra touch to the rotating, which is added here, is to be able to set the background color of the rotated object.
+ </li>
+<li>
+  <strong><em><big>imagick_shell_hack:</big></em></strong> this driver introduces the ability to do a fully-featured rotation.</p>
+<pre lang="php">
+/**
+* Enable the Imagick Shell driver
+*/
+asido::driver('imagick_shell_hack');
+</pre>
+<p>As with the extension version above, for this hack driver the extra touch added is setting the background color of the rotated object.
+ </li>
+</ul>
+
+	</div>
+
+	<script src="/bootstrap.3.3.7/jquery.min.js"></script>
+	<script src="/bootstrap.3.3.7/bootstrap.min.js"></script>
+	<script src="/nav.js"></script>
+</body>
+</html>
