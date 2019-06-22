@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
 	jQuery.ajax({
-		url: '/.nav.html',
+		url: '/nav.html',
 		success: function(o)
 		{
 			jQuery('body .container').prepend(o);
